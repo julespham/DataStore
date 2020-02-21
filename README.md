@@ -9,7 +9,7 @@ Commands:
 GET
 SET
 UNSET
-EXISTS
+EXISTS  
 Transaction support: BEGIN, ROLLBACK, COMMIT
 
 Note: Each command will come in via STDIN separated by new lines. 
