@@ -1,7 +1,10 @@
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Receiver Object
+ */
 public class KeyValueStore {
-    ConcurrentHashMap<String, String> dataStore; 
+    ConcurrentHashMap<String, String> dataStore;
     public KeyValueStore() {
         dataStore = new ConcurrentHashMap<>();
     }
@@ -11,7 +14,7 @@ public class KeyValueStore {
     }
 
     public void setKey(String key, String value) {
-        dataStore.putIfAbsent(key, value);
+        dataStore.put(key, value);  
     }
 
     public void getValue(String key) {
@@ -26,4 +29,5 @@ public class KeyValueStore {
         System.out.println("Chow");
     }
 
+ 
 }

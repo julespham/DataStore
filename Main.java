@@ -9,7 +9,7 @@ public class Main {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Hello, welcome to the super simple key-value store. \n" + 
             "Please enter one of the following commands:\n" + 
-            Command.values() +
+            Command.values().toString() +
             "Once done, enter END \n");
             String str;
             while ((str = reader.readLine()) != null) {
@@ -21,10 +21,10 @@ public class Main {
     }
 
     enum Command {
-        SET, UNSET, GET, EXISTS, END
+        SET, UNSET, GET, EXISTS, END, BEGIN, COMMIT
     }
 
-    public static void executeCommand(KeyValueStore keyValueStore, String... command ) {
+    public static void executeCommand(KeyValueStore keyValueStore, String[] command ) {
         validateCommand(command);
         Command userCommand = Command.valueOf(command[0]);
         switch (userCommand) {
@@ -33,6 +33,8 @@ public class Main {
             case GET -> keyValueStore.getValue(command[1]); 
             case EXISTS -> keyValueStore.exists(command[1]);
             case END -> System.exit(0);
+            case BEGIN -> keyValueStore.beginTransaction();
+            case COMMIT -> System.out.println("Commit");
         }    
     }
 
@@ -40,12 +42,17 @@ public class Main {
         Command userCommand = Command.valueOf(command[0]);
         switch (userCommand) {
             case UNSET, GET, EXISTS -> {
-                if (command.length != 1) {
+                if (command.length != 2) {
                     throw new IllegalArgumentException("Wrong number of arguments");
                 }
             }
             case SET -> {
-                if (command.length < 2) {
+                if (command.length != 3) {
+                    throw new IllegalArgumentException("Wrong number of arguments");
+                }
+            }
+            case END -> {
+                if (command.length != 1) {
                     throw new IllegalArgumentException("Wrong number of arguments");
                 }
             }
