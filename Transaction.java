@@ -5,15 +5,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class Transaction {
     private ConcurrentLinkedQueue<Operation> commands;
-    boolean inTransaction;
 
     public Transaction() {
         commands = new ConcurrentLinkedQueue<>();
     }
 
-    // TO DO: Change method signature
-    public void begin(Operation command) {
-        this.inTransaction = true;
+    public void add(Operation command) {
         commands.add(command);
     }
 

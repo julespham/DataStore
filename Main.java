@@ -27,16 +27,25 @@ public class Main {
     public static void executeCommand(KeyValueStore keyValueStore, String[] command ) {
         validateCommand(command);
         CommandArgument commandArgument = CommandArgument.valueOf(command[0]);
-        if (commandArgument == CommandArgument.BEGIN) {
-            keyValueStore.begin();
-        }
-        // switch(command) { 
-        //     case SET -> keyValueStore.setKey(command[1], command[2]);
-        //     case UNSET -> keyValueStore.unsetKey(command[1]); 
-        //     case GET -> keyValueStore.getValue(command[1]); 
-        //     case EXISTS -> keyValueStore.exists(command[1]);
-        //     case END -> System.exit(0);
-        // }    
+        switch(commandArgument) { 
+            case SET -> keyValueStore.set(command[1], command[2]);
+            case UNSET -> keyValueStore.unset(command[1]); 
+            case GET -> {
+               String value = keyValueStore.get(command[1]);
+               if (value != null) {
+                    System.out.println(valu54e);
+               }
+            } 
+            case EXISTS -> {
+                Boolean value = keyValueStore.exists(command[1]);
+                if (value != null) {
+                    System.out.println(value);
+                }
+            }
+            case BEGIN -> keyValueStore.begin();
+            case COMMIT -> keyValueStore.commit();
+            case END -> System.exit(0);
+        }    
     }
 
     public static void validateCommand(String... command) {
@@ -52,7 +61,7 @@ public class Main {
                     throw new IllegalArgumentException("Wrong number of arguments");
                 }
             }
-            case END -> {
+            case BEGIN, COMMIT, END -> {
                 if (command.length != 1) {
                     throw new IllegalArgumentException("Wrong number of arguments");
                 }
