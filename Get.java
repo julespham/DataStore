@@ -1,14 +1,14 @@
-public class GetValue implements Operation {
+public class Get implements Operation {
     private final KeyValueStore keyValueStore;
     String key;
 
-    public GetValue(KeyValueStore keyValueStore, String key) {
+    public Get(KeyValueStore keyValueStore, String key) {
         this.keyValueStore = keyValueStore;
         this.key = key;
     }
     @Override
     public void execute() {
-        keyValueStore.getValue(key);
+        keyValueStore.get(key);
     }
     
 }

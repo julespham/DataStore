@@ -1,3 +1,5 @@
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -5,29 +7,44 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class KeyValueStore {
     ConcurrentHashMap<String, String> dataStore;
+    List<Transaction> transactions;
+
     public KeyValueStore() {
         dataStore = new ConcurrentHashMap<>();
+        this.transactions = new Vector<>();
     }
 
-    public void unsetKey(String key) {
+    public void unset(String key) {
         dataStore.remove(key);
     }
 
-    public void setKey(String key, String value) {
+    public void set(String key, String value) {
         dataStore.put(key, value);  
     }
 
-    public void getValue(String key) {
-        System.out.println(dataStore.getOrDefault(key, null));
+    public String get(String key) {
+        return dataStore.getOrDefault(key, null);
     }
 
-    public void exists(String key) {
-        System.out.println(dataStore.containsKey(key));
+    public boolean exists(String key) {
+        return dataStore.containsKey(key);
     }
 
-    public void end() {
-        System.out.println("Chow");
+    public String end() {
+        return "chow";
     }
 
- 
+    public void begin() {
+        Transaction transaction= new Transaction();
+        transactions.add(transaction);
+
+        transaction.begin(() -> set("x", "1"));
+        transaction.begin(() -> get("x"));
+    }
+
+    public void commit() {
+        // Transaction transaction = transactions.
+
+    }
+
 }

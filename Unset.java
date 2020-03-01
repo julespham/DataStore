@@ -7,7 +7,7 @@ public class Unset implements Operation {
     }
 	@Override
 	public void execute() {
-		KeyValueStore.unsetKey(key);
+		KeyValueStore.unset(key);
 		
 	}
     
