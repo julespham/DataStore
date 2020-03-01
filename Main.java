@@ -5,14 +5,12 @@ import java.io.InputStreamReader;
 public class Main {
     public static void main(String[] args) {
         KeyValueStore keyValueStore = new KeyValueStore();
-        KeyValueStoreTest keyValueStoreTest = new KeyValueStoreTest();
-        keyValueStoreTest.test();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Hello, welcome to the super simple key-value store. \n" + 
             "Please enter one of the following commands:\n" + 
-            CommandArgument.values().toString() +
-            "Once done, enter END \n");
+            java.util.Arrays.asList(CommandArgument.values()) +
+            " Once done, enter END \n");
             String str;
             while ((str = reader.readLine()) != null) {
                 executeCommand(keyValueStore,  str.split(" "));
@@ -29,6 +27,9 @@ public class Main {
     public static void executeCommand(KeyValueStore keyValueStore, String[] command ) {
         validateCommand(command);
         CommandArgument commandArgument = CommandArgument.valueOf(command[0]);
+        if (commandArgument == CommandArgument.BEGIN) {
+            keyValueStore.begin();
+        }
         // switch(command) { 
         //     case SET -> keyValueStore.setKey(command[1], command[2]);
         //     case UNSET -> keyValueStore.unsetKey(command[1]); 

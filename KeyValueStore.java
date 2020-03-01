@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Vector;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -7,11 +6,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class KeyValueStore {
     ConcurrentHashMap<String, String> dataStore;
-    List<Transaction> transactions;
+    Stack<Transaction> transactions;
 
     public KeyValueStore() {
         dataStore = new ConcurrentHashMap<>();
-        this.transactions = new Vector<>();
+        this.transactions = new Stack<>();
     }
 
     public void unset(String key) {
@@ -35,7 +34,7 @@ public class KeyValueStore {
     }
 
     public void begin() {
-        Transaction transaction= new Transaction();
+        Transaction transaction = new Transaction();
         transactions.add(transaction);
 
         transaction.begin(() -> set("x", "1"));
@@ -43,8 +42,7 @@ public class KeyValueStore {
     }
 
     public void commit() {
-        // Transaction transaction = transactions.
-
+        transactions.pop().commit();
     }
 
 }
