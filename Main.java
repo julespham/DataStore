@@ -16,15 +16,17 @@ public class Main {
                 executeCommand(keyValueStore,  str.split(" "));
             }
         } catch (IOException io) {
-                io.printStackTrace();
+            io.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }  
     }
 
-    public enum CommandArgument {
-        SET, UNSET, GET, EXISTS, END, BEGIN, COMMIT
+    private enum CommandArgument {
+        SET, UNSET, GET, EXISTS, END, BEGIN, COMMIT, ROLLBACK
     }
 
-    public static void executeCommand(KeyValueStore keyValueStore, String[] command ) {
+    private static void executeCommand(KeyValueStore keyValueStore, String[] command) throws IllegalStateException, IllegalArgumentException {
         validateCommand(command);
         CommandArgument commandArgument = CommandArgument.valueOf(command[0]);
         switch(commandArgument) { 
@@ -33,7 +35,7 @@ public class Main {
             case GET -> {
                String value = keyValueStore.get(command[1]);
                if (value != null) {
-                    System.out.println(valu54e);
+                    System.out.println(value);
                }
             } 
             case EXISTS -> {
@@ -44,8 +46,22 @@ public class Main {
             }
             case BEGIN -> keyValueStore.begin();
             case COMMIT -> keyValueStore.commit();
+            case ROLLBACK -> keyValueStore.rollback();
             case END -> System.exit(0);
         }    
+    }
+
+    private static String usageMessage(CommandArgument command) {
+        return "Usage: " + switch (command) {
+            case UNSET ->  "UNSET <key>";
+            case GET -> "GET <key>";
+            case EXISTS -> "EXISTS <key>";
+            case SET -> "SET <key> <value>";
+            case BEGIN -> "BEGIN";
+            case COMMIT -> "COMMIT";
+            case ROLLBACK -> "ROLLBACK";
+            case END -> "END";
+        };
     }
 
     public static void validateCommand(String... command) {
@@ -53,20 +69,19 @@ public class Main {
         switch (commandArgument) {
             case UNSET, GET, EXISTS -> {
                 if (command.length != 2) {
-                    throw new IllegalArgumentException("Wrong number of arguments");
+                    throw new IllegalArgumentException(usageMessage(commandArgument));
                 }
             }
             case SET -> {
                 if (command.length != 3) {
-                    throw new IllegalArgumentException("Wrong number of arguments");
+                    throw new IllegalArgumentException(usageMessage(commandArgument));
                 }
             }
-            case BEGIN, COMMIT, END -> {
+            case BEGIN, COMMIT, ROLLBACK, END -> {
                 if (command.length != 1) {
-                    throw new IllegalArgumentException("Wrong number of arguments");
+                    throw new IllegalArgumentException(usageMessage(commandArgument));
                 }
             }
         }
     }
-
 }

@@ -1,17 +1,17 @@
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 /**
  * Receiver Object
  */
 public class KeyValueStore {
-    ConcurrentHashMap<String, String> dataStore;
+    HashMap<String, String> dataStore;
     Stack<Transaction> transactions;
     boolean inCommit;
     
 
     public KeyValueStore() {
-        dataStore = new ConcurrentHashMap<>();
+        dataStore = new HashMap<>();
         this.transactions = new Stack<>();
         this.inCommit = false;
     }
@@ -55,13 +55,22 @@ public class KeyValueStore {
         transactions.add(new Transaction());
     }
 
-    public void commit() {
+    public void commit() throws IllegalStateException {
         if (!transactions.isEmpty()) {
             this.inCommit = true;
             transactions.pop().commit();
             this.inCommit = false;
+        } else {
+            new IllegalStateException("No XX transact-ion");
+        }
+    }
 
-        }   
+    public void rollback() throws IllegalStateException{
+        if (!transactions.isEmpty()) {
+            transactions.pop();
+        } else {
+            new IllegalStateException("No transaction");
+        }
     }
 
 }

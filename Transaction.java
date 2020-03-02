@@ -1,13 +1,12 @@
-import java.util.concurrent.ConcurrentLinkedQueue;
-
+import java.util.LinkedList;
 /**
  * Invoker Object
  */
 public class Transaction {
-    private ConcurrentLinkedQueue<Operation> commands;
+    private LinkedList<Operation> commands;
 
     public Transaction() {
-        commands = new ConcurrentLinkedQueue<>();
+        commands = new LinkedList<>();
     }
 
     public void add(Operation command) {
@@ -16,5 +15,6 @@ public class Transaction {
 
     public void commit() {
         commands.forEach(Operation::execute);
+        commands.clear();
     }
 } 
